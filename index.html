@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div class="main-nav container flex">
+            <a href="#" onclick="reload()">
+                <img src="./svgs/logo.svg" alt="">
+            </a>
+            <div class="nav-links">
+                <ul class="flex">
+                    <li class="hover-link nav-item" id="ipl" onclick="onNavItemClick('ipl')">IPL</li>
+                    <li class="hover-link nav-item" id="finance" onclick="onNavItemClick('finance')">Finance</li>
+                    <li class="hover-link nav-item" id="politics" onclick="onNavItemClick('politics')">Politics</li>
+                    <li class="hover-link nav-item" id="education" onclick="onNavItemClick('education')">Education</li>
+                    <li class="hover-link nav-item" id="technology" onclick="onNavItemClick('technology')">Technology
+                    </li>
+                </ul>
+            </div>
+            <div class="notes-icon">
+                <img id="notes-icon" src="./svgs/notes.svg" alt="Notes" onclick="toggleNotesModal()">
+            </div>
+
+            <div class="search-bar flex">
+                <input id="search-text" type="text" class="news-input" placeholder="e.g Science">
+                <button class="search-button" id="search-button">search</button>
+            </div>
+        </div>
+
+    </nav>
+    <!-- Notes Model -->
+    <div id="notes-modal" class="notes-modal hidden">
+        <div class="notes-modal-content">
+            <h3>Take Notes</h3>
+            <textarea id="notes-text" placeholder="Write your notes here..."></textarea>
+            <button id="save-note" onclick="saveNoteToServer()">Save Note</button>
+            <button id="close-note" onclick="toggleNotesModal()">Close</button>
+        </div>
+    </div>
+
+    <div id="notes-modal" class="notes-modal hidden">
+        <div id="note-content" class="notes-modal-content">
+            <h3>Take Notes</h3>
+            <textarea id="notes-text" placeholder="Write your notes here..."></textarea>
+            <button id="save-note" onclick="saveNote()">Save Note</button>
+            <button id="close-note" onclick="toggleNotesModal()">Close</button>
+        </div>
+    </div>
+
+
+    <main>
+        <div class="card-container container flex" id="card-container">
+        </div>
+    </main>
+    <template id="template-news-card">
+        <div class="card">
+            <div class="card-header">
+                <img src="https://via.placeholder.com/400x200" alt="news-image" id="news-img">
+            </div>
+            <div class="card-content">
+                <h3 class="news-title" id="news-title">this is title</h3>
+                <h6 class="news-source" id="news-source">End Gadget end 2020</h6>
+                <p class="news-desc" id="news-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
+                    nobis adipisci ab explicabo velit maxime eos dignissimos ratione? Laboriosam, officia.</p>
+            </div>
+        </div>
+
+    </template>
+
+
+    <script src="script.js"></script>
+    <script src="server.js"></script>
+</body>
+
+</html>
