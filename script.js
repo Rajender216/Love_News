@@ -69,21 +69,80 @@ searchButton.addEventListener("click",()=>{
     currSelectedNav=null;
 })
 
-//notes
+
+//notes download locally
 // Function to toggle the visibility of the modal
-function toggleNotesModal() {
-    const modal = document.getElementById('notes-modal');
-    modal.classList.toggle('hidden');
-    if (!modal.classList.contains('hidden')) {
-        loadNote(); // Load the saved note when opening the modal
-    }
-}
+// function toggleNotesModal() {
+//     const modal = document.getElementById('notes-modal');
+//     modal.classList.toggle('hidden');
+//     if (!modal.classList.contains('hidden')) {
+//         loadNote(); // Load the saved note when opening the modal
+//     }
+// }
 
 // Function to save notes as a JPG image using canvas.toDataURL()
-// Function to save notes to the server
+// function saveNote() {
+//     const noteContent = document.getElementById('note-content');
+
+//     // Ensure the modal is visible when capturing the note
+//     if (noteContent.classList.contains('hidden')) {
+//         alert('Please open the notes modal to capture the note.');
+//         return;
+//     }
+
+//     // Use html2canvas to capture the note content
+//     html2canvas(noteContent).then(canvas => {
+//         // Convert the canvas to a base64 encoded image (JPG)
+//         const imageDataURL = canvas.toDataURL('image/jpeg');
+
+//         // Create a download link and trigger the download
+//         const link = document.createElement('a');
+//         link.href = imageDataURL;
+//         link.download = 'note.jpg';  // Set the download file name
+//         link.click();  // Trigger the download
+//     }).catch(error => {
+//         console.error('Error capturing the note:', error);
+//         alert('Failed to capture the note. Please try again.');
+//     });
+// }
+
+// Function to load saved notes from LocalStorage
+// function loadNote() {
+//     const savedNote = localStorage.getItem('userNote');
+//     if (savedNote) {
+//         document.getElementById('notes-text').value = savedNote;
+//     }
+// }
+// Function to download notes as a text file
+function downloadNoteAsText() {
+    const noteText = document.getElementById('notes-text').value;
+
+    if (!noteText) {
+        alert('Please write some notes before downloading.');
+        return;
+    }
+
+    // Create a Blob with the note text
+    const blob = new Blob([noteText], { type: 'text/plain' });
+
+    // Create a download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'note.txt'; // Set the download file name
+
+    // Trigger the download
+    link.click();
+
+    // Revoke the object URL to free up memory
+    URL.revokeObjectURL(link.href);
+}
+
+
+//notes
+// Function to save the note to the server
 function saveNoteToServer() {
     const noteText = document.getElementById('notes-text').value;
-    
+
     if (!noteText) {
         alert('Please write some notes before saving.');
         return;
@@ -95,12 +154,13 @@ function saveNoteToServer() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ content: noteText })
+        body: JSON.stringify({ content: noteText })  // Send the note content
     })
     .then(response => response.text())
     .then(data => {
-        alert('Note saved!');
-        loadNotesFromServer(); // Reload notes after saving
+        alert('Note saved successfully!');
+        // Optionally, you could clear the input after saving:
+        document.getElementById('notes-text').value = '';
     })
     .catch(error => {
         console.error('Error saving note:', error);
@@ -108,8 +168,13 @@ function saveNoteToServer() {
     });
 }
 
+// Add an event listener to the Save Note button
+document.getElementById('save-note').addEventListener('click', saveNoteToServer);
 
-// Function to load notes from the server
+
+
+
+// / Function to fetch saved notes from the server and display them
 function loadNotesFromServer() {
     fetch('/notes')
     .then(response => response.json())
@@ -117,27 +182,25 @@ function loadNotesFromServer() {
         const notesList = document.getElementById('notes-list');
         notesList.innerHTML = ''; // Clear the current list
 
+        // Loop through the notes and display each one
         notes.forEach(note => {
             const noteItem = document.createElement('li');
-            noteItem.textContent = note.content;
+            noteItem.textContent = note.content; // Display the note content
             notesList.appendChild(noteItem);
         });
+
+        // Show the saved notes section
+        document.getElementById('saved-notes-section').classList.remove('hidden');
     })
     .catch(error => {
         console.error('Error fetching notes:', error);
-        alert('Failed to load notes.');
+        alert('Failed to load saved notes.');
     });
 }
 
-// Call this function to load notes when the page loads
-window.addEventListener('load', loadNotesFromServer);
+// Function to toggle notes modal (if needed)
+function toggleNotesModal() {
+    const modal = document.getElementById('notes-modal');
+    modal.classList.toggle('hidden');
+}
 
-
-
-// Function to load saved notes from LocalStorage
-// function loadNote() {
-//     const savedNote = localStorage.getItem('userNote');
-//     if (savedNote) {
-//         document.getElementById('notes-text').value = savedNote;
-//     }
-// }
